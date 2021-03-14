@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ignore artifacts of compiling hacks
+*.o
+*.bin
+
+# Ignore VIM files.
+*.swp
+*.swo
