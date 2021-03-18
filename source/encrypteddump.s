@@ -6,12 +6,13 @@
 # mips-linux-gnu-objcopy encrypteddump.o encrypteddump.padded-bin -O binary --only-section=.text
 #
 # The resulting bin can be loaded into MAME like so, or patched onto a legit binary in the correct
-# spot.
+# spot. To patch a FIREBALL.EXE, use the inject_data.py script.
 #
 # load encrypteddump.bin,0x8004f20c
 #
 # To stop the binary from spitting out a "DVD wake-up" packet on the serial, load 116 bytes
-# of zeros (29 NOPs) over addresss 0x80051410.
+# of zeros (29 NOPs) over addresss 0x80051410. To skip SCSI checks for files, load 4 bytes
+# of zeros (1 NOP) over address 0x80028aec.
 
 # Given a register to load to, and a label from this file, load the absolute address to reg.
 .macro labs reg loc
@@ -180,6 +181,7 @@ _hex_first_nibble:
     lb $a0, 0($a0)
     nop
     srl $a0, $a0, 4
+    andi $a0, $a0, 0x0F
 
     # Figure out if it is alpha or numeric
     addiu $t0, $a0, -10
